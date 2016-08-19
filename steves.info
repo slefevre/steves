@@ -1,0 +1,4 @@
+name = Steve's Module
+description = A veritable Junk Trove of usefutile stuff
+core = 7.x
+package = Steves
