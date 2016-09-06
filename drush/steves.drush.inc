@@ -36,19 +36,40 @@ function steves_drush_command() {
 }
 
 function steves_drush_registry_rebuild_cache_clear() {
-  cache_clear_all();
+
+  $message = dt('Rebulding registry.');
+  drush_log($message);
+  drush_print($message);
   registry_rebuild();
+
+  $message = dt('Clearing all caches.');
+  drush_log($message);
+  drush_print($message);
+  cache_clear_all();
 }
 
 function steves_drush_pm_reinstall($module_name) {
+
   $module = array($module_name);
-  drupal_disable($module);
-  drupal_uninstall_modules($module_name);
+
+  steves_drush_pm_remove($module_name);
+
+  $message = dt('Enabling module.');
+  drush_log($message);
+  drush_print($message);
   drupal_enable($module);
 }
 
 function steves_drush_pm_remove($module_name) {
   $module = array($module_name);
-  drupal_disable($module);
+
+  $message = dt('Disabling module.');
+  drush_log($message);
+  drush_print($message);
+  module_disable($module);
+
+  $mesage = dt('Uninstalling module.');
+  drush_log($message);
+  drush_print($message);
   drupal_uninstall_modules($module_name);
 }
