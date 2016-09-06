@@ -63,7 +63,7 @@ function steves_drush_pm_reinstall($module_name) {
 function steves_drush_pm_remove($module_name) {
   $module = array($module_name);
 
-  $message = dt('Disabling module.' . __LINE__);
+  $message = dt('Disabling module.');
   drush_log($message);
   drush_print($message);
   module_disable($module);
