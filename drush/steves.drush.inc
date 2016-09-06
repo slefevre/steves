@@ -23,7 +23,7 @@ function steves_drush_command() {
   );
   $commands['pm-remove'] = array(
     'description' => 'Disables and uninstalls a module',
-    'callback' => 'steves_drush_pm_removed',
+    'callback' => 'steves_drush_pm_remove',
     'arguments' => array(
       'module_name' => 'The name of the module',
     ),
@@ -50,26 +50,50 @@ function steves_drush_registry_rebuild_cache_clear() {
 
 function steves_drush_pm_reinstall($module_name) {
 
+  $module_name = preg_replace("/[^[:alnum:]_]/ui", '', $module_name);
+
   $module = array($module_name);
 
-  steves_drush_pm_remove($module_name);
+  if ( ! steves_drush_pm_remove($module_name) ) {
+    return 0;
+  }
 
   $message = dt('Enabling module.');
   drush_log($message);
   drush_print($message);
-  module_enable($module);
+  if ( ! module_enable($module) ) {
+    $message = dt('Error enabling module.');
+    drush_log($message, 'error');
+    drush_print($message, 'error');
+    return 0;
+  }
+  return 1;
 }
 
 function steves_drush_pm_remove($module_name) {
+
+  $module_name = preg_replace("/[^[:alnum:]_]/ui", '', $module_name);
   $module = array($module_name);
 
   $message = dt('Disabling module.');
   drush_log($message);
   drush_print($message);
-  module_disable($module);
+  if ( ! module_disable($module) ) {
+    $message = dt('Error disabling module.');
+    drush_log($message, 'error');
+    drush_print($message, 'error');
+    return 0;
+  }
 
   $message = dt('Uninstalling module.');
   drush_log($message);
   drush_print($message);
-  drupal_uninstall_modules($module_name);
+  if ( ! drupal_uninstall_modules($module_name) ) {
+    $message = dt('Error uninstalling module.');
+    drush_log($message, 'error');
+    drush_print($message, 'error');
+    return 0;
+  }
+
+  return 1;
 }
