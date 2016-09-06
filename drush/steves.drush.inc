@@ -57,7 +57,7 @@ function steves_drush_pm_reinstall($module_name) {
   $message = dt('Enabling module.');
   drush_log($message);
   drush_print($message);
-  drupal_enable($module);
+  module_enable($module);
 }
 
 function steves_drush_pm_remove($module_name) {
